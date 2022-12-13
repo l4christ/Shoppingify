@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('item_lists', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('item_id');
+            $table->foreignId('user_id');
             $table->string('name');
             $table->boolean('state');
             $table->timestamps();
