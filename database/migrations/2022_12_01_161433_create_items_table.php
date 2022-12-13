@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('user_id');
             $table->foreignId('category_id');
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
