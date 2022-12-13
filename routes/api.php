@@ -11,7 +11,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/items', [ItemController::class, 'index']);
-Route::get('/item', [ItemController::class, 'fetchItem']);
-Route::post('/add-item', [ItemController::class, 'addItem']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/items', [ItemController::class, 'index']);
+    Route::get('/item', [ItemController::class, 'fetchItem']);
+    Route::post('/add-item', [ItemController::class, 'addItem']);
+});

@@ -13,7 +13,7 @@ class Item extends Model
 
     public static function booted(){
         static::creating(function (Item $item){
-            $item->user_id = auth()->id() ?? 0;
+            $item->user_id = auth()->id();
         });
     }
 }
