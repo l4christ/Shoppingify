@@ -18,7 +18,7 @@ return new class extends Migration
             // $table->foreignId('item_id');
             $table->foreignId('user_id');
             $table->string('name');
-            $table->boolean('state');
+            $table->boolean('state')->default(0);
             $table->timestamps();
         });
     }
