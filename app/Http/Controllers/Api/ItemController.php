@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -47,7 +48,7 @@ class ItemController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'category_id' => 'required',
+            'category_id' => 'required|exists:item_categories,id',
             'note' => 'nullable',
         ]);
 
@@ -60,6 +61,23 @@ class ItemController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'item created',
+                'data' => []
+            ], 200);
+        }
+    }
+
+    public  function addCategory(Request $request){
+        $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $category = new ItemCategory();
+        $category->name = $request->name;
+
+        if($category->save()){
+            return response()->json([
+                'status' => true,
+                'message' => 'category added',
                 'data' => []
             ], 200);
         }

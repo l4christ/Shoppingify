@@ -11,6 +11,15 @@ class ItemList extends Model
 
     protected $fillable = [
         'name',
-        'user_id'
+        'user_id',
+        'state'
     ];
+
+    public function owner(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function listitems(){
+        return $this->hasMany(ItemListPivot::class, 'item_id');
+    }
 }

@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id');
             $table->foreignId('list_id');
+            $table->foreignId('user_id');
             $table->foreignId('item_categories_id');
+            $table->integer('qty');
             $table->timestamps();
         });
     }
