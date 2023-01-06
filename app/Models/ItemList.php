@@ -20,6 +20,6 @@ class ItemList extends Model
     }
     
     public function listitems(){
-        return $this->hasMany(ItemListPivot::class, 'item_id');
+        return $this->hasMany(ItemListPivot::class, 'list_id', 'id');
     }
 }

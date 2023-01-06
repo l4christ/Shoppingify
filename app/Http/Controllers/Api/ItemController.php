@@ -82,4 +82,14 @@ class ItemController extends Controller
             ], 200);
         }
     }
+
+
+    public  function fetchCategories()
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'category added',
+            'data' => ItemCategory::select(['id', 'name'])->get()
+        ], 200);
+    }
 }

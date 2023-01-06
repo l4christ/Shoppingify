@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('list_id');
             $table->foreignId('user_id');
             $table->foreignId('item_categories_id');
-            $table->integer('qty');
+            $table->integer('qty')->nullable();
             $table->timestamps();
         });
     }
