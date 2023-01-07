@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Copy .env file
+      run: cp .env.testing .env
+    - name: Install dependencies
+      run: composer install
+    - name: Run tests
+      run: vendor/bin/phpunit
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and push Docker image
+      uses: actions/docker/build-push-action@v2
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        registry: docker.io
+        repository: my-repository
+        tags: latest
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Log in to Docker registry
+      uses: actions/docker/cli-login-action@v1
+      with:
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: SSH into live server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        script: |
+          docker pull docker.io/my-repository:latest
+          docker stop my-container || true
+          docker rm my-container || true
+          docker run -d --name my-container -p 80:80 docker.io/my-repository:latest
