@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - dev-branch-emma
 
 jobs:
   test:
