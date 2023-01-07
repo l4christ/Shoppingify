@@ -35,7 +35,5 @@ RUN composer install --no-scripts --no-autoloader
 RUN composer dump-autoload --optimize && \
     php artisan optimize
 
-# Run Supervisor
-COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
