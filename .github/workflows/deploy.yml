@@ -52,6 +52,6 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         script: |
-          docker pull docker.io/l4christ/my-repository:dev-branch-emma-455b208
-          docker run -d --name my-container -p 80:80 docker.io/l4christ/my-repository:dev-branch-emma-455b208
+          docker pull docker.io/l4christ/my-repository:latest
+          docker run -d --name my-container -p 80:80 docker.io/l4christ/my-repository:latest
 
