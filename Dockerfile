@@ -17,8 +17,7 @@ RUN apk add --no-cache \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -f /var/cache/apk/*
 
-# Configure Nginx
-COPY config/nginx.conf /etc/nginx/nginx.conf
+
 
 # Copy code of the Laravel application into the image
 COPY . /var/www/html
