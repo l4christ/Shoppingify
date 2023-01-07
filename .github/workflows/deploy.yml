@@ -28,7 +28,9 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: l4christ/my-repository
+        tags: latest
         registry: docker.io
+        dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -48,7 +50,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
         script: |
           docker pull docker.io/l4christ/my-repository:dev-branch-emma-455b208
           docker run -d --name my-container -p 80:80 docker.io/l4christ/my-repository:dev-branch-emma-455b208
