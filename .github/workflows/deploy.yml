@@ -44,13 +44,16 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: SSH into live server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
+        port: 22
         script: |
-          docker pull docker.io/my-repository:latest
-          docker stop my-container || true
-          docker rm my-container || true
-          docker run -d --name my-container -p 80:80 docker.io/my-repository:latest
+          whoami
+          # docker pull docker.io/my-repository:latest
+          # docker stop my-container || true
+          # docker rm my-container || true
+          # docker run -d --name my-container -p 80:80 docker.io/my-repository:latest
+
