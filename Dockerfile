@@ -28,7 +28,7 @@ RUN chown -R www-data:www-data /var/www/html/storage && \
     chmod -R 775 /var/www/html/storage && \
     ln -s /var/www/html/storage/app/public /var/www/html/public/storage
 
-# Run Composer
+# Run Composers
 RUN composer install --no-scripts --no-autoloader
 
 # Generate autoloader and run artisan optimize
