@@ -43,14 +43,14 @@ jobs:
       with:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: SSH into live server
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        password: ${{ secrets.PASSWORD }}
         script: |
           docker pull docker.io/l4christ/my-repository:dev-branch-emma-455b208
           docker run -d --name my-container -p 80:80 docker.io/l4christ/my-repository:dev-branch-emma-455b208
