@@ -51,7 +51,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         script: |
           docker pull docker.io/my-repository:latest
-          docker stop my-container || true
-          docker rm my-container || true
           docker run -d --name my-container -p 80:80 docker.io/my-repository:latest
 
