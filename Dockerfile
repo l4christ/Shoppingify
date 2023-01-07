@@ -35,4 +35,3 @@ RUN composer dump-autoload --optimize && \
     php artisan optimize
 
 
-
