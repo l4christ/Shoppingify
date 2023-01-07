@@ -32,7 +32,6 @@ jobs:
         push: true
         registry: docker.io
         repository: l4christ/my-repository
-        tags: latest
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
