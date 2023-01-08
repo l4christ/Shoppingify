@@ -29,7 +29,7 @@ ENV APP_NAME="Question Board" \
 # copy entrypoint files
 COPY ./docker/docker-php-* /usr/local/bin/
 RUN dos2unix /usr/local/bin/docker-php-entrypoint
-RUN dos2unix /usr/local/bin/docker-php-entrypoint-dev
+# RUN dos2unix /usr/local/bin/docker-php-entrypoint-dev
 
 # copy nginx configuration
 # COPY ./docker/nginx.conf /etc/nginx/nginx.conf
