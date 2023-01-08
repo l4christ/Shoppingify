@@ -34,11 +34,11 @@ ENV NODE_ENV=production
 COPY ["package.json", "package-lock.json*", "./var/www/html/"]
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
-    && npm install \
+    && npm install --global npm@8 \
     && node --version \
     && npm -v
 
-RUN npm run dev
+# RUN npm run dev
 
 # COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
