@@ -2,8 +2,6 @@ FROM php:8.1-fpm-alpine
 
 # Install dependencies
 RUN apk add --no-cache \
-    nginx \
-    supervisor \
     bash \
     curl \
     freetype \
