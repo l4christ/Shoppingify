@@ -37,6 +37,7 @@ RUN dos2unix /usr/local/bin/docker-php-entrypoint
 # COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 # COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
 
+RUN ls
 # copy application code
 # WORKDIR /var/www/app
 # COPY . /var/www/app
