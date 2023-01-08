@@ -23,13 +23,13 @@ RUN php artisan config:cache && \
     a2enmod rewrite
 
 FROM node
-WORKDIR /var/www/html/
+WORKDIR /app
+COPY package.json .
+RUN npm i
 COPY . .
-# COPY package.json .
-RUN npm install
 ## EXPOSE [Port you mentioned in the vite.config file]
-# EXPOSE 5173
-# CMD ["npm", "run", "dev"]
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
 
 # WORKDIR /var/www/html/
 # COPY ["package.json", "package-lock.json*", "./var/www/html/"]
