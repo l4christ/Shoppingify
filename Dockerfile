@@ -12,6 +12,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # install application dependencies
 WORKDIR /var/www/app
+COPY . /var/www/app
 # COPY ./composer.json ./src/composer.lock* ./
 RUN composer install --no-scripts --no-autoloader --ansi --no-interaction
 
