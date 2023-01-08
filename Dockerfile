@@ -1,66 +1,48 @@
-FROM ubuntu:22.04
+FROM fhsinchy/php-nginx-base:php8.1.3-fpm-nginx1.20.2-alpine3.15
 
-LABEL maintainer="Taylor Otwell"
+# set composer related environment variables
+ENV PATH="/composer/vendor/bin:$PATH" \
+    COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_VENDOR_DIR=/var/www/vendor \
+    COMPOSER_HOME=/composer
 
-ARG WWWGROUP
-ARG NODE_VERSION=18
-ARG POSTGRES_VERSION=14
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer --ansi --version --no-interaction
 
-WORKDIR /var/www/html
+# install application dependencies
+WORKDIR /var/www/app
+COPY ./src/composer.json ./src/composer.lock* ./
+RUN composer install --no-scripts --no-autoloader --ansi --no-interaction
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV TZ=UTC
+# add custom php-fpm pool settings, these get written at entrypoint startup
+ENV FPM_PM_MAX_CHILDREN=20 \
+    FPM_PM_START_SERVERS=2 \
+    FPM_PM_MIN_SPARE_SERVERS=1 \
+    FPM_PM_MAX_SPARE_SERVERS=3
 
-ENV WWWGROUP=1000
-ENV WWWUSER=1000
+# set application environment variables
+ENV APP_NAME="Question Board" \
+    APP_ENV=production \
+    APP_DEBUG=true
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# copy entrypoint files
+COPY ./docker/docker-php-* /usr/local/bin/
+RUN dos2unix /usr/local/bin/docker-php-entrypoint
+RUN dos2unix /usr/local/bin/docker-php-entrypoint-dev
 
-RUN apt-get update \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
-    && curl -sS 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c' | gpg --dearmor | tee /usr/share/keyrings/ppa_ondrej_php.gpg > /dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
-    && apt-get update \
-    && apt-get install -y php8.1-cli php8.1-dev \
-       php8.1-pgsql php8.1-sqlite3 php8.1-gd \
-       php8.1-curl \
-       php8.1-imap php8.1-mysql php8.1-mbstring \
-       php8.1-xml php8.1-zip php8.1-bcmath php8.1-soap \
-       php8.1-intl php8.1-readline \
-       php8.1-ldap \
-       php8.1-msgpack php8.1-igbinary php8.1-redis php8.1-swoole \
-       php8.1-memcached php8.1-pcov php8.1-xdebug \
-    && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
-    && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarn.gpg >/dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /usr/share/keyrings/pgdg.gpg >/dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y yarn \
-    && apt-get install -y mysql-client \
-    && apt-get install -y postgresql-client-$POSTGRES_VERSION \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# copy nginx configuration
+# COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+# COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
 
-RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
-
-RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
-
-COPY start-container /usr/local/bin/start-container
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
-RUN chmod +x /usr/local/bin/start-container
-
-COPY . /app/
-COPY . /var/www/html/
-COPY .env.example /var/www/html/.env
-
+# copy application code
+WORKDIR /var/www/app
+COPY ./src .
+RUN composer dump-autoload -o \
+    && chown -R :www-data /var/www/app \
+    && chmod -R 775 /var/www/app/storage /var/www/app/bootstrap/cache
 
 EXPOSE 80
 
-ENTRYPOINT ["start-container"]
+# run supervisor
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
