@@ -34,7 +34,7 @@ ENV NODE_ENV=production
 COPY ["package.json", "package-lock.json*", "./var/www/html/"]
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
-    && npm install
+    && npm install \
     && node --version \
     && npm -v
 
