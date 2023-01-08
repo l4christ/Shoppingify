@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev-branch-emma
+      - dev-branch-1
 
 jobs:
   test:
