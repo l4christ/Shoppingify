@@ -8,11 +8,12 @@
 # Install Node.js
 
 FROM composer:2.0 as build
-COPY . /app/
+# COPY . /app/
+COPY . /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM php:8.1-apache-buster as production
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 ENV APP_ENV=local
 ENV APP_DEBUG=true
 
