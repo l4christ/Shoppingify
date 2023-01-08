@@ -9,6 +9,7 @@
 
 FROM composer:2.0 as build
 # COPY . /app/
+WORKDIR /var/www/html/
 COPY . /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
