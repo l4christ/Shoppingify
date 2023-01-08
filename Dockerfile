@@ -11,7 +11,7 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
-RUN apt-get update && apt-get install -y mysql-server
+RUN apt-get install mariadb-server
 RUN mysql -u root -e "CREATE DATABASE laravel"
 RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
 
