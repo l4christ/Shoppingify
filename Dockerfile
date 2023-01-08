@@ -14,6 +14,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/app
 COPY . /var/www/app
 # COPY ./composer.json ./src/composer.lock* ./
+RUN cd /var/www/app
 RUN composer install --no-interaction
 # RUN composer install --no-scripts --no-autoloader --ansi --no-interaction
 
@@ -37,7 +38,7 @@ RUN dos2unix /usr/local/bin/docker-php-entrypoint
 # COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 # COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
 
-RUN ls
+# RUN ls
 # copy application code
 # WORKDIR /var/www/app
 # COPY . /var/www/app
