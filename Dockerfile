@@ -1,10 +1,11 @@
 FROM composer:2.0 as build
-FROM node:12.18.1 as node
-ENV NODE_ENV=production
-RUN npm install --production
+FROM node:12.18.1
+
+
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
-
+ENV NODE_ENV=production
+RUN npm install --production
 
 # syntax=docker/dockerfile:1
 
