@@ -1,7 +1,13 @@
 FROM composer:2.0 as build
+FROM node:12.18.1 as node
+ENV NODE_ENV=production
+RUN npm install --production
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
-RUN apt-get npm
+
+
+# syntax=docker/dockerfile:1
+
 RUN npm install
 FROM php:8.1-apache-buster as production
 
