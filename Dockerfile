@@ -9,9 +9,9 @@
 
 FROM composer:2.0 as build
 COPY . /var/www/html/
-# WORKDIR /var/www/html/
+WORKDIR /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
-COPY --from=build //var/www/html/ /var/www/html
+COPY --from=build /var/www/html/ /var/www/html
 
 
 
