@@ -1,63 +1,57 @@
-FROM composer:2.0 as build
-COPY . /app/
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+FROM php:8.1-fpm
 
-FROM php:8.1-apache-buster as production
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    unzip \
+    git \
+    curl \
+    mariadb-client \
+    nginx
 
-ENV APP_ENV=production
-ENV APP_DEBUG=false
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql
-COPY opache /usr/local/etc/php/conf.d/opcache.ini
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-gd --with-freetype --with-jpeg
+RUN docker-php-ext-install gd
 
-#Update APT repository & Install gnupg
-RUN apt-get update && apt-get install -y gnupg
+# Install xdebug
+RUN pecl install xdebug
 
-#Add an account for running MySQL
-RUN groupadd -r mysql && useradd -r -g mysql mysql
+# Remove the default NGINX configuration file
+RUN rm -v /etc/nginx/nginx.conf
 
-#Add the MySQL APT repository & Install necessary programs
-RUN apt-get update \
-    && echo "deb http://repo.mysql.com/apt/ubuntu/ bionic mysql-5.7" > \
-      /etc/apt/sources.list.d/mysql.list \
-    && apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5 \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends perl pwgen
+# Copy the custom NGINX configuration file
+COPY nginx.conf /etc/nginx/
 
-#Install MySQL
-RUN { \
-    #Set MySQL root password for silent installation
-    echo mysql-community-server mysql-community-server/root-pass password ''; \
-    echo mysql-community-server mysql-community-server/re-root-poss password ''>
-    } | debconf-set-selections \
-    && apt-get install -y mysql-server \
-    && mkdir -p /var/lib/mysql /var/run/mysqld \
-    && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
-    && chmod 777 /var/run/mysqld
+# Create the log directory and set the ownership to www-data
+RUN mkdir -p /var/log/nginx && chown -R www-data:www-data /var/log/nginx
 
-#Solve the problem that ubuntu cannot log in from another container
-RUN sed -i 's/bind-address/#bind-address/' /etc/mysql/mysql.conf.d/mysqld.cnf
+# Set the working directory
+WORKDIR /var/www/html
 
-#Mount Data Volume
-VOLUME /var/lib/mysql
+# Copy the application code
+COPY . /var/www/html
 
-#Expose the default port
-EXPOSE 3306
-
-#Start MySQL
-CMD ["mysqld","--user","mysql"]
-
-RUN mysql -u root -e "CREATE DATABASE laravel"
-RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
-
-COPY --from=build /app /var/www/html
-COPY conf /etc/apache2/sites-available/000-default.conf
-
+# Copy the environment variables
 COPY .env.example /var/www/html/.env
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+# Set the ownership of the code to the www-data user
+RUN chown -R www-data:www-data /var/www/html
+
+# Run composer install
+RUN composer install --no-dev
+
+# Run database migrations and seeders
+RUN php artisan migrate --seed
+
+# Set the default command
+CMD ["php-fpm"]
