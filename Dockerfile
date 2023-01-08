@@ -22,12 +22,10 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-FROM node
-COPY package.json .
+FROM node:alpine
+WORKDIR /var/www/html/
+COPY ./ ./
 RUN npm install
-COPY . .
-## EXPOSE [Port you mentioned in the vite.config file]
-EXPOSE 5173
 CMD ["npm", "run", "dev"]
 
 # WORKDIR /var/www/html/
