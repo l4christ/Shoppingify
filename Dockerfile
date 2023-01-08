@@ -25,7 +25,7 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
 # RUN mysql -u root -e "CREATE DATABASE laravel"
 # RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
 
-# COPY --from=build /app /var/www/html
+COPY --from=build . /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
 
 COPY .env.example /var/www/html/.env
