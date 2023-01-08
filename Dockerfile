@@ -1,15 +1,6 @@
-# FROM ubuntu:22.04
+FROM ubuntu:22.04
 
 LABEL maintainer="Taylor Otwell"
-
-
-COPY . /app/
-COPY --from=build /app /var/www/html
-
-COPY .env.example /var/www/html/.env
-
-
-
 
 ARG WWWGROUP
 ARG NODE_VERSION=18
@@ -64,6 +55,15 @@ COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
+
+
+COPY . /app/
+COPY --from=build /app /var/www/html
+
+COPY .env.example /var/www/html/.env
+
+
+
 
 EXPOSE 8000
 
