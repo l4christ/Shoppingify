@@ -22,6 +22,15 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
+FROM node
+WORKDIR /app
+COPY package.json .
+RUN npm i
+COPY . .
+## EXPOSE [Port you mentioned in the vite.config file]
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
+
 # WORKDIR /var/www/html/
 # COPY ["package.json", "package-lock.json*", "./var/www/html/"]
 # RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
