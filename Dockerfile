@@ -23,7 +23,6 @@ RUN php artisan config:cache && \
     a2enmod rewrite
 
 FROM node
-WORKDIR /app
 COPY package.json .
 RUN npm i
 COPY . .
