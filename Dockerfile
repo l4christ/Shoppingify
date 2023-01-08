@@ -8,10 +8,6 @@ FROM composer:2.0 as build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
-
-# syntax=docker/dockerfile:1
-
-RUN npm install
 FROM php:8.1-apache-buster as production
 
 ENV APP_ENV=local
