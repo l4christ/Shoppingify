@@ -57,6 +57,8 @@ COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 
+RUN docker-php-ext-configure opcache --enable-opcache && \
+    docker-php-ext-install pdo pdo_mysql
 COPY . /app/
 COPY --from=build /app /var/www/html
 
