@@ -2,7 +2,7 @@
 FROM node:12.18.1
 ENV NODE_ENV=production
 RUN npm install --production
-
+RUN npm run build
 
 FROM composer:2.0 as build
 COPY . /app/
