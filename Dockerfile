@@ -17,8 +17,12 @@ FROM php:8.1-apache-buster as production
 WORKDIR /var/www/html/
 ENV APP_ENV=local
 ENV APP_DEBUG=true
-
-RUN pwd
+COPY . /var/www/html/
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    chmod 777 -R /var/www/html/storage/ && \
+    chown -R www-data:www-data /var/www/ && \
+    a2enmod rewrite
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
@@ -45,8 +49,3 @@ COPY conf /etc/apache2/sites-available/000-default.conf
 
 COPY .env.example /var/www/html/.env
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
