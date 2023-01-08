@@ -1,6 +1,15 @@
-FROM ubuntu:22.04
+# FROM ubuntu:22.04
 
 LABEL maintainer="Taylor Otwell"
+
+
+COPY . /app/
+COPY --from=build /app /var/www/html
+
+COPY .env.example /var/www/html/.env
+
+
+
 
 ARG WWWGROUP
 ARG NODE_VERSION=18
