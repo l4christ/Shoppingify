@@ -4,7 +4,7 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
-ENV APP_ENV=production
+ENV APP_ENV=local
 ENV APP_DEBUG=false
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
@@ -23,13 +23,13 @@ RUN php artisan config:cache && \
     a2enmod rewrite
 
 FROM node
-WORKDIR /app
+WORKDIR /var/www/html/
 COPY package.json .
-RUN npm i
-COPY . .
+RUN npm install
+# COPY . .
 ## EXPOSE [Port you mentioned in the vite.config file]
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+# EXPOSE 5173
+# CMD ["npm", "run", "dev"]
 
 # WORKDIR /var/www/html/
 # COPY ["package.json", "package-lock.json*", "./var/www/html/"]
