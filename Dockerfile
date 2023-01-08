@@ -22,11 +22,11 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-FROM node:alpine
-WORKDIR /var/www/html/
-COPY ./ ./
-RUN npm install
-CMD ["npm", "run", "dev"]
+# FROM node:alpine
+# WORKDIR /var/www/html/
+# COPY ./ ./
+# RUN npm install
+# CMD ["npm", "run", "dev"]
 
 # WORKDIR /var/www/html/
 # COPY ["package.json", "package-lock.json*", "./var/www/html/"]
