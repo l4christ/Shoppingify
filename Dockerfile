@@ -6,19 +6,14 @@
 # RUN npm run dev
 
 # Install Node.js
-
+WORKDIR /var/www/html/
 FROM composer:2.0 as build
 # COPY . /app/
-WORKDIR /var/www/html/
-COPY . /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM php:8.1-apache-buster as production
-
-WORKDIR /var/www/html/
 ENV APP_ENV=local
 ENV APP_DEBUG=true
-COPY . /var/www/html/
 
 # RUN php artisan config:cache && \
 #     php artisan route:cache && \
