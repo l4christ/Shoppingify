@@ -1,44 +1,23 @@
-FROM php:8.1-fpm
+FROM composer:2.0 as build
+COPY . /app/
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
-# Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
+FROM php:8.1-apache-buster as production
 
-# Set working directory
-WORKDIR /var/www
+ENV APP_ENV=production
+ENV APP_DEBUG=false
 
-# Install dependencies
-# RUN apt-get update && apt-get install -y \
-#     build-essential \
-# #    mysql-client \
-#     locales \
-#     git \
-#     unzip \
-#     zip \
-#     curl
-RUN apt-get install -y php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath
+RUN docker-php-ext-configure opcache --enable-opcache && \
+    docker-php-ext-install pdo pdo_mysql
+COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY --from=build /app /var/www/html
+COPY conf /etc/apache2/sites-available/000-default.conf
 
-# Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring  exif pcntl
+COPY .env.example /var/www/html/.env
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory contents
-COPY . /var/www
-
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
-
-# Change current user to www
-USER www
-
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    chmod 777 -R /var/www/html/storage/ && \
+    chown -R www-data:www-data /var/www/ && \
+    a2enmod rewrite
