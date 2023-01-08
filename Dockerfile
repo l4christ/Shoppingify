@@ -1,35 +1,23 @@
-FROM php:8.1-fpm-alpine
+FROM composer:2.0 as build
+COPY . /app/
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
-# Install dependencies
-RUN apk add --no-cache \
-    bash \
-    curl \
-    freetype \
-    libpng \
-    libjpeg-turbo \
-    freetype-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    && docker-php-ext-install \
-    pdo_mysql \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && rm -f /var/cache/apk/*
+FROM php:8.1-apache-buster as production
 
+ENV APP_ENV=production
+ENV APP_DEBUG=false
 
+RUN docker-php-ext-configure opcache --enable-opcache && \
+    docker-php-ext-install pdo pdo_mysql
+COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
-# Copy code of the Laravel application into the image
-COPY . /var/www/html
+COPY --from=build /app /var/www/html
+COPY conf /etc/apache2/sites-available/000-default.conf
 
-# Grant permission for storage directory
-RUN chown -R www-data:www-data /var/www/html/storage && \
-    chmod -R 775 /var/www/html/storage && \
-    ln -s /var/www/html/storage/app/public /var/www/html/public/storage
+COPY .env.prod /var/www/html/.env
 
-# Run Composers
-RUN composer install --no-scripts --no-autoloader
-
-# Generate autoloader and run artisan optimize
-RUN composer dump-autoload --optimize && \
-    php artisan optimize
-
-
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    chmod 777 -R /var/www/html/storage/ && \
+    chown -R www-data:www-data /var/www/ && \
+    a2enmod rewrite
