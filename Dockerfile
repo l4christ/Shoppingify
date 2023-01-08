@@ -12,7 +12,7 @@ COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM php:8.1-apache-buster as production
-
+WORKDIR /var/www/html
 ENV APP_ENV=local
 ENV APP_DEBUG=true
 
@@ -25,7 +25,7 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 # RUN mysql -u root -e "CREATE DATABASE laravel"
 # RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
 ENV NODE_ENV=production
-COPY ["package.json", "package-lock.json*", "./app/"]
+COPY ["package.json", "package-lock.json*", "./var/www/html/"]
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && npm install --global npm@8 \
