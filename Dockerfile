@@ -1,9 +1,17 @@
 
-FROM node:12.18.1
-ENV NODE_ENV=production
-COPY ["package.json", "package-lock.json*", "./app/"]
-RUN npm install 
-RUN npm run dev
+# FROM node:12.18.1
+# ENV NODE_ENV=production
+# COPY ["package.json", "package-lock.json*", "./app/"]
+# RUN npm install 
+# RUN npm run dev
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install --global npm@8 \
+    && npm run build  \
+    && node --version \
+    && npm -v
 
 FROM composer:2.0 as build
 COPY . /app/
