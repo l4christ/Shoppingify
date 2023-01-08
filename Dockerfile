@@ -24,13 +24,15 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 # RUN mysql -u root -e "CREATE DATABASE laravel"
 # RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
+ENV NODE_ENV=production
+COPY ["package.json", "package-lock.json*", "./app/"]
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && npm install --global npm@8 \
     && npm run build  \
     && node --version \
     && npm -v
-    
+
 COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
 
