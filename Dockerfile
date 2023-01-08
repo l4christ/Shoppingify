@@ -22,14 +22,13 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-WORKDIR /var/www/html/
-ENV NODE_ENV=production
-COPY ["package.json", "package-lock.json*", "./var/www/html/"]
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install --global npm@8 \
-    && node --version \
-    && npm -v
+# WORKDIR /var/www/html/
+# COPY ["package.json", "package-lock.json*", "./var/www/html/"]
+# RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+#     && apt-get install -y nodejs \
+#     && npm install --global npm@8 \
+#     && node --version \
+#     && npm -v
 
 
 
