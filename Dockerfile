@@ -37,7 +37,7 @@ RUN dos2unix /usr/local/bin/docker-php-entrypoint
 
 # copy application code
 WORKDIR /var/www/app
-COPY ./src .
+COPY . /var/www/app
 RUN composer dump-autoload -o \
     && chown -R :www-data /var/www/app \
     && chmod -R 775 /var/www/app/storage /var/www/app/bootstrap/cache
