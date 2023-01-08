@@ -12,10 +12,9 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 #Update APT repository & Install gnupg
-RUN apt-get update && apt-get install -y gnupg
 
-RUN mysql -u root -e "CREATE DATABASE laravel"
-RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
+# RUN mysql -u root -e "CREATE DATABASE laravel"
+# RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
 
 COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
