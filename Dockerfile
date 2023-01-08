@@ -26,9 +26,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends perl pwgen
 
 #Install MySQL
-RUN 
-    #Set MySQL root password for silent installation
-    echo mysql-community-server mysql-community-server/root-pass password ''; \
+RUN apt-get update \
+    && echo mysql-community-server mysql-community-server/root-pass password ''; \
     echo mysql-community-server mysql-community-server/re-root-poss password ''>
     | debconf-set-selections \
     && apt-get install -y mysql-server \
