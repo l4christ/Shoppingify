@@ -9,6 +9,11 @@ ENV APP_DEBUG=false
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
+
+# Install Postgre PDO
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
