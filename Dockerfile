@@ -24,7 +24,7 @@ RUN php artisan config:cache && \
 
 FROM node
 WORKDIR /var/www/html/
-COPY package.json .
+# COPY package.json .
 RUN npm install
 # COPY . .
 ## EXPOSE [Port you mentioned in the vite.config file]
