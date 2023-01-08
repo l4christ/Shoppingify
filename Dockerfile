@@ -1,7 +1,7 @@
 
 FROM node:12.18.1
 ENV NODE_ENV=production
-COPY ["package.json", "package-lock.json*", "./app"]
+COPY ["package.json", "package-lock.json*", "./app/"]
 RUN npm install 
 RUN npm run dev
 
