@@ -11,7 +11,7 @@ FROM composer:2.0 as build
 COPY . /var/www/html/
 WORKDIR /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
-COPY --from=build /var/www/html/ /var/www/html
+# COPY --from=build /var/www/html/ /var/www/html
 
 
 
@@ -35,6 +35,7 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 # RUN mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'secret'"
 
 COPY . /var/www/html/
+WORKDIR /var/www/html/
 ENV NODE_ENV=production
 COPY ["package.json", "package-lock.json*", "./var/www/html/"]
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
