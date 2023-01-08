@@ -27,7 +27,7 @@ RUN apt-get update \
 
 #Install MySQL
 RUN apt-get update \
-    && echo mysql-community-server mysql-community-server/root-pass password ''; \
+    && echo mysql-community-server mysql-community-server/root-pass password '' \
     && apt-get install -y mysql-server \
     && mkdir -p /var/lib/mysql /var/run/mysqld \
     && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
