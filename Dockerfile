@@ -57,6 +57,7 @@ COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 COPY . /app/
+COPY . /var/www/html/
 COPY .env.example /var/www/html/.env
 
 
