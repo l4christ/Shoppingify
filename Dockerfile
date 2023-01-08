@@ -14,7 +14,7 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
 
-COPY .env.prod /var/www/html/.env
+COPY .env /var/www/html/.env
 
 RUN php artisan config:cache && \
     php artisan route:cache && \
