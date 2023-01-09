@@ -29,7 +29,7 @@ ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
 
 RUN php artisan config:cache && \
     php artisan route:cache && \
-    php artisan migrate && \
+    # php artisan migrate && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
