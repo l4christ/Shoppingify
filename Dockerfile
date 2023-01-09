@@ -34,9 +34,9 @@ RUN php artisan config:cache && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
-    
-FROM composer
 
+FROM composer
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 
 
