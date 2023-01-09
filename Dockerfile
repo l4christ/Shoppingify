@@ -9,7 +9,7 @@ FROM php:8.1-apache-buster as production
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
     
-RUN apt-get install nano && apt-get install unzip 
+RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 #Install dependecies
 FROM php:fpm-alpine
