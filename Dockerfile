@@ -22,7 +22,7 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x
 RUN node -v
 # FROM node:alpine
 # WORKDIR /var/www/html/
