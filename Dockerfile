@@ -1,7 +1,8 @@
-WORKDIR /var/www/html/
+
 FROM composer:2.0 as build
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+WORKDIR /var/www/html/
 COPY . /var/www/html/
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM php:8.1-apache-buster as production
 
