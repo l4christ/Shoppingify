@@ -22,21 +22,10 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-FROM node:16.3.0-alpine
-RUN node -v
-# FROM node:alpine
-# WORKDIR /var/www/html/
-# COPY ./ ./
-# RUN npm install
-# CMD ["npm", "run", "dev"]
-
-# WORKDIR /var/www/html/
-# COPY ["package.json", "package-lock.json*", "./var/www/html/"]
-# RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
-#     && apt-get install -y nodejs \
-#     && npm install --global npm@8 \
-#     && node --version \
-#     && npm -v
+RUN apt-get update \
+    && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm \
 
 
 
