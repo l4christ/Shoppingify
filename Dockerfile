@@ -7,13 +7,17 @@ FROM php:8.1-apache-buster as production
 
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql
+    docker-php-ext-install pdo pdo_mysql 
+
+RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
+
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
 
-RUN apt-get update && apt-get install nano && apt-get install unzip
+RUN apt-get update && apt-get install nano && apt-get install unzip && apt-get install -y gnupg
+
 
 # COPY .env.example /var/www/html/.env
 
