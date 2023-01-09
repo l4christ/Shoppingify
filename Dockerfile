@@ -22,7 +22,7 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+RUN curl -sL https://deb.nodesource.com/setup_12.x | -E bash -
 RUN node -v
 # FROM node:alpine
 # WORKDIR /var/www/html/
