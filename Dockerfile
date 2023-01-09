@@ -27,12 +27,12 @@ ENV DB_USERNAME=ciara
 ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
 
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    # php artisan migrate && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+# RUN php artisan config:cache && \
+#     php artisan route:cache && \
+#     php artisan migrate && \
+#     chmod 777 -R /var/www/html/storage/ && \
+#     chown -R www-data:www-data /var/www/ && \
+#     a2enmod rewrite
 
 RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
 
