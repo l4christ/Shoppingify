@@ -28,7 +28,7 @@ jobs:
     - name: Build and push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: l4christ/my-repository
+        image: sirloko/const-app
         tags: latest
         registry: docker.io
         dockerfile: Dockerfile
