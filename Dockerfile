@@ -22,6 +22,11 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
+RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
+
+RUN ccloud auth login && \
+ ccloud cluster sql somber-hulk
+
 # FROM node:alpine
 # WORKDIR /var/www/html/
 # COPY ./ ./
