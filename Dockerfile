@@ -4,6 +4,8 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
+ARG NODE_VERSION=18
+
 ENV APP_ENV=local
 ENV APP_DEBUG=false
 
