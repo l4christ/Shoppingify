@@ -11,13 +11,8 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 
 #Install dependecies
 RUN apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    git \
-    curl \
+    # git \
+    # curl \
     libpq-dev
 
 RUN apt-get update && apt-get install nano && apt-get install unzip && apt-get install -y gnupg
