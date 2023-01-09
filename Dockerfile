@@ -22,7 +22,7 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-# FROM node:alpine
+FROM node:alpine
 # WORKDIR /var/www/html/
 # COPY ./ ./
 # RUN npm install
