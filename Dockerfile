@@ -1,6 +1,6 @@
-# FROM composer:2.0 as build
-# COPY . /app/
-# RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+FROM composer:2.0 as build
+COPY . /app/
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM php:8.1-apache-buster as production
 
@@ -25,12 +25,12 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql exif pcntl
 
 # COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
-# COPY --from=build /app /var/www/html
+COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
 
 
 
-# COPY .env.example /var/www/html/.env
+COPY .env.example /var/www/html/.env
 
 # ENV APP_ENV=local
 # ENV APP_DEBUG=true
