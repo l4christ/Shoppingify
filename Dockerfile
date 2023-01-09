@@ -24,7 +24,7 @@ RUN php artisan config:cache && \
 
 
 
-# RUN apt-get update && apt-get install nano
+RUN apt-get update && apt-get install nano
 
 # ENV APP_ENV=local
 # ENV APP_DEBUG=false
