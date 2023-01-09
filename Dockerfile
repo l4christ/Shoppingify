@@ -12,7 +12,7 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 #Install dependecies
-FROM php:fpm-alpine
+# FROM php:fpm-alpine
 
 RUN set -ex \
   && apk --no-cache add \
@@ -30,7 +30,7 @@ COPY conf /etc/apache2/sites-available/000-default.conf
 
 
 
-COPY .env.example /var/www/html/.env
+# COPY .env.example /var/www/html/.env
 
 # ENV APP_ENV=local
 # ENV APP_DEBUG=true
