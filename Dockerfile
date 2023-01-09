@@ -4,15 +4,6 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
-ENV APP_ENV=local
-ENV APP_DEBUG=false
-
-ENV DB_CONNECTION=pgsql
-ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
-ENV DB_PORT=26257
-ENV DB_DATABASE=defaultdb
-ENV DB_USERNAME=ciara
-ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
@@ -25,28 +16,19 @@ COPY .env.example /var/www/html/.env
 
 RUN php artisan config:cache && \
     php artisan route:cache && \
+    php artisan migrate && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
 RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
 
-# RUN ccloud auth login && \
-#  ccloud cluster sql somber-hulk
+ENV APP_ENV=local
+ENV APP_DEBUG=false
 
-# FROM node:alpine
-# WORKDIR /var/www/html/
-# COPY ./ ./
-# RUN npm install
-# CMD ["npm", "run", "dev"]
-
-# WORKDIR /var/www/html/
-# COPY ["package.json", "package-lock.json*", "./var/www/html/"]
-# RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
-#     && apt-get install -y nodejs \
-#     && npm install --global npm@8 \
-#     && node --version \
-#     && npm -v
-
-
-
+ENV DB_CONNECTION=pgsql
+ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
+ENV DB_PORT=26257
+ENV DB_DATABASE=defaultdb
+ENV DB_USERNAME=ciara
+ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
