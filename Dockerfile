@@ -8,7 +8,7 @@ FROM php:8.1-apache-buster as production
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
-    
+
 RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 #Install dependecies
@@ -55,8 +55,8 @@ RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz
 RUN php artisan config:cache && \
     php artisan route:cache && \
     chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+    chown -R www-data:www-data /var/www/ && 
+    # a2enmod rewrite
 
 # Setup the Composer installer
 RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
