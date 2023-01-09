@@ -14,7 +14,7 @@ COPY conf /etc/apache2/sites-available/000-default.conf
 
 COPY .env.example /var/www/html/.env
 
-RUN apt install nano
+RUN apt-get update && apt-get install nano
 
 ENV APP_ENV=local
 ENV APP_DEBUG=false
