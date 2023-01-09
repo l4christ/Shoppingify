@@ -10,16 +10,20 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
 
 #Install dependecies
-RUN apt-get remove libpq5
-RUN apt-get install -y \
+FROM php:fpm-alpine
 
-    # git \
-    # curl \
-    libpq-dev
+RUN set -ex \
+  && apk --no-cache add \
+    postgresql-dev
+
+RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
+
+# RUN apt-get install -y \
+#     libpq-dev
 
 RUN apt-get update && apt-get install nano && apt-get install unzip && apt-get install -y gnupg
 
-RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
+# RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
 
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
