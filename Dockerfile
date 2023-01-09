@@ -27,6 +27,7 @@ RUN php artisan config:cache && \
 RUN apt-get update \
     && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y nodejs \
+    && apt-get install nano \
     && npm install -g npm \
 
 
