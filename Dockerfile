@@ -27,7 +27,7 @@ RUN apt-get update \
     && apt-get install nano \
     && npm install -g npm \
 
-RUN npm install && npm run build
+# RUN npm install && npm run build
 
 
 
