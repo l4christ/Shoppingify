@@ -1,3 +1,4 @@
+WORKDIR /var/www/html/
 FROM composer:2.0 as build
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 COPY . /var/www/html/
