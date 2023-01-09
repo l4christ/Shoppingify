@@ -36,6 +36,7 @@ RUN php artisan config:cache && \
     a2enmod rewrite
 
 FROM composer
+COPY . .
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 
