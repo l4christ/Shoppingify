@@ -20,6 +20,8 @@ COPY .env.example /var/www/html/.env
 ENV APP_ENV=local
 ENV APP_DEBUG=true
 
+RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
+
 ENV DB_CONNECTION=pgsql
 ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
 ENV DB_PORT=26257
@@ -32,7 +34,8 @@ RUN php artisan config:cache && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
-
+    
+FROM composer
 
 
 
