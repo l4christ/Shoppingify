@@ -12,7 +12,10 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 # COPY --from=build /app /var/www/html/
 COPY conf /etc/apache2/sites-available/000-default.conf
 
+COPY . .
+
 COPY .env.example /var/www/html/.env
+
 
 RUN apt-get update && apt-get install nano
 
