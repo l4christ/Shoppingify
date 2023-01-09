@@ -22,7 +22,7 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-FROM node:12.18.1
+FROM node:16.14.1
 RUN node -v
 # FROM node:alpine
 # WORKDIR /var/www/html/
