@@ -12,7 +12,7 @@ RUN set -ex \
 
 RUN docker-php-ext-install pdo pdo_pgsql pgsql exif pcntl
 
-FROM php: as production
+FROM php:8.1
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
