@@ -2,23 +2,24 @@ FROM composer:2.0 as build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
-FROM php:8.1-apache-buster as production
-
-
-
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql 
-    
-RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 #Install dependecies
-# FROM php:fpm-alpine
+FROM php:fpm-alpine
 
 RUN set -ex \
   && apk --no-cache add \
     postgresql-dev
 
 RUN docker-php-ext-install pdo pdo_pgsql pgsql exif pcntl
+
+FROM php: as production
+
+RUN docker-php-ext-configure opcache --enable-opcache && \
+    docker-php-ext-install pdo pdo_mysql 
+    
+RUN apt-get update && apt-get install nano && apt-get install unzip 
+
+
 
 
 # RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
