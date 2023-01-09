@@ -4,7 +4,7 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
-ENV APP_ENV=production
+ENV APP_ENV=local
 ENV APP_DEBUG=true
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
@@ -13,6 +13,8 @@ COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
 COPY conf /etc/apache2/sites-available/000-default.conf
+
+RUN apt-get update && apt-get install nano
 
 COPY .env.example /var/www/html/.env
 
@@ -24,7 +26,7 @@ RUN php artisan config:cache && \
 
 
 
-RUN apt-get update && apt-get install nano
+
 
 # ENV APP_ENV=local
 # ENV APP_DEBUG=false
