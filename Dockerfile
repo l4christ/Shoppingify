@@ -21,7 +21,7 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql exif pcntl
 # RUN apt-get install -y \
 #     libpq-dev
 
-RUN apt-get update && apt-get install nano && apt-get install unzip && apt-get install -y gnupg
+RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 # RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
 
