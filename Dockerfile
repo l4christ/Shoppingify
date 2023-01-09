@@ -10,7 +10,9 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
 
 #Install dependecies
+RUN apt-get remove libpq5
 RUN apt-get install -y \
+
     # git \
     # curl \
     libpq-dev
