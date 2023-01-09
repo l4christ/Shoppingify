@@ -10,7 +10,7 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
 
 # COPY --from=build /app /var/www/html
-COPY conf /etc/apache2/sites-available/000-default.conf
+# COPY conf /etc/apache2/sites-available/000-default.conf
 
 COPY .env.example /var/www/html/.env
 
