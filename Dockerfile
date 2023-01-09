@@ -1,5 +1,6 @@
 FROM composer as build
 # COPY . /app/
+RUN cd /var/www/html/
 COPY . /var/www/html/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
