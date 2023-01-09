@@ -7,6 +7,13 @@ FROM php:8.1-apache-buster as production
 ENV APP_ENV=local
 ENV APP_DEBUG=false
 
+ENV DB_CONNECTION=pgsql
+ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
+ENV DB_PORT=26257
+ENV DB_DATABASE=defaultdb
+ENV DB_USERNAME=ciara
+ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
+
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
 COPY opache /usr/local/etc/php/conf.d/opcache.ini
