@@ -4,8 +4,8 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
-ENV APP_ENV=local
-ENV APP_DEBUG=false
+ENV APP_ENV=production
+ENV APP_DEBUG=true
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
@@ -22,16 +22,18 @@ RUN php artisan config:cache && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-RUN apt-get update && apt-get install nano
 
-ENV APP_ENV=local
-ENV APP_DEBUG=false
 
-ENV DB_CONNECTION=pgsql
-ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
-ENV DB_PORT=26257
-ENV DB_DATABASE=defaultdb
-ENV DB_USERNAME=ciara
-ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
+# RUN apt-get update && apt-get install nano
 
-RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
+# ENV APP_ENV=local
+# ENV APP_DEBUG=false
+
+# ENV DB_CONNECTION=pgsql
+# ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
+# ENV DB_PORT=26257
+# ENV DB_DATABASE=defaultdb
+# ENV DB_USERNAME=ciara
+# ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
+
+# RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
