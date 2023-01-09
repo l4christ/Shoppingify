@@ -4,8 +4,7 @@ RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interacti
 
 FROM php:8.1-apache-buster as production
 
-ENV APP_ENV=local
-ENV APP_DEBUG=true
+
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
@@ -17,6 +16,16 @@ COPY conf /etc/apache2/sites-available/000-default.conf
 RUN apt-get update && apt-get install nano
 
 COPY .env.example /var/www/html/.env
+
+ENV APP_ENV=local
+ENV APP_DEBUG=true
+
+ENV DB_CONNECTION=pgsql
+ENV DB_HOST=somber-hulk-5426.7tc.cockroachlabs.cloud
+ENV DB_PORT=26257
+ENV DB_DATABASE=defaultdb
+ENV DB_USERNAME=ciara
+ENV DB_PASSWORD='Q_6qr4vLwiNsNEQwv237hA'
 
 RUN php artisan config:cache && \
     php artisan route:cache && \
