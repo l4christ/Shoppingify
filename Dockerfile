@@ -8,6 +8,8 @@ FROM php:8.1-apache-buster as production
 
 RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql 
+    
+RUN apt-get update && apt-get install nano && apt-get install unzip 
 
 #Install dependecies
 FROM php:fpm-alpine
@@ -21,7 +23,7 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql exif pcntl
 # RUN apt-get install -y \
 #     libpq-dev
 
-RUN apt-get update && apt-get install nano && apt-get install unzip 
+
 
 # RUN docker-php-ext-install pdo pdo_pgsql pgsql zip exif pcntl
 
@@ -38,7 +40,7 @@ COPY conf /etc/apache2/sites-available/000-default.conf
 # ENV APP_DEBUG=true
 
 RUN curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.3.6.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+# RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 
 # ENV APP_KEY=base64:jRAM9FHeXPby8ErlJOBngCokxxuU99cOSH0sMKhwk3M=
 # ENV APP_DEBUG=true
